@@ -1,0 +1,8 @@
+name: DustplanetTimeTracker
+main: de.dustplanet.timetracker.TimeTracker
+version: 1.0.2
+author: xGhOsTkiLLeRx
+commands:
+  tracker:
+    description: Tracks the time
+    usage: /tracker help|hilfe|h
