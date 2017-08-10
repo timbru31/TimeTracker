@@ -28,6 +28,14 @@
     </repository>
   </repositories>
 
+  <dependencies>
+    <dependency>
+      <groupId>net.milkbowl.vault</groupId>
+      <artifactId>VaultAPI</artifactId>
+      <version>1.6</version>
+    </dependency>
+  </dependencies>
+
   <!-- Maven is broken, so add scm duplication to child -->
   <scm>
     <url>https://github.com/timbru31/TimeTracker</url>
