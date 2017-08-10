@@ -10,6 +10,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 
+import org.bstats.bukkit.Metrics;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -48,7 +49,8 @@ public class TimeTracker extends JavaPlugin {
             try {
                 time.createNewFile();
             } catch (IOException e) {
-                getServer().getLogger().info("[TimeTracker] couldn't create the 'time.dat' file! (I/O Exception)");
+                getLogger().info("Couldn't create the 'time.dat' file! (I/O Exception)");
+                e.printStackTrace();
             }
         }
         trackedPlayers = (HashMap<String, Long[][]>) loadHashMap(time);
@@ -59,6 +61,9 @@ public class TimeTracker extends JavaPlugin {
         pm.registerEvents(new TimeTrackerPlayerListener(this), this);
 
         getCommand("tracker").setExecutor(new TimeTrackerCommand(this));
+
+        new Metrics(this);
+
         for (Player p : getServer().getOnlinePlayers()) {
             String name = p.getName();
             if (isPlayerTracked(name)) {
