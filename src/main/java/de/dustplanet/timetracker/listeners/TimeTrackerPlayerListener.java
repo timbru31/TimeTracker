@@ -17,26 +17,26 @@ public class TimeTrackerPlayerListener implements Listener {
 
     @EventHandler
     public void onPlayerJoin(PlayerJoinEvent event) {
-        String name = event.getPlayer().getName();
-        if (!plugin.isPlayerTracked(name)) {
-            plugin.addTrackedPlayer(name);
+        String uuid = event.getPlayer().getUniqueId().toString();
+        if (!plugin.isPlayerTracked(uuid)) {
+            plugin.addTrackedPlayer(uuid);
         }
-        plugin.addJoinedTime(name, System.currentTimeMillis());
+        plugin.addJoinedTime(uuid, System.currentTimeMillis());
     }
 
     @EventHandler
     public void onPlayerQuit(PlayerQuitEvent event) {
-        String name = event.getPlayer().getName();
-        if (plugin.isPlayerTracked(name)) {
-            plugin.calculatePlayTime(name);
+        String uuid = event.getPlayer().getUniqueId().toString();
+        if (plugin.isPlayerTracked(uuid)) {
+            plugin.calculatePlayTime(uuid);
         }
     }
 
     @EventHandler
     public void onPlayerKick(PlayerKickEvent event) {
-        String name = event.getPlayer().getName();
-        if (plugin.isPlayerTracked(name)) {
-            plugin.calculatePlayTime(name);
+        String uuid = event.getPlayer().getUniqueId().toString();
+        if (plugin.isPlayerTracked(uuid)) {
+            plugin.calculatePlayTime(uuid);
         }
     }
 }

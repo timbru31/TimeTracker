@@ -25,10 +25,10 @@ public class TimeTracker extends JavaPlugin {
 
     @Override
     public void onDisable() {
-        for (Player p : getServer().getOnlinePlayers()) {
-            String name = p.getName();
-            if (isPlayerTracked(name)) {
-                calculatePlayTime(name);
+        for (Player player : getServer().getOnlinePlayers()) {
+            String uuid = player.getUniqueId().toString();
+            if (isPlayerTracked(uuid)) {
+                calculatePlayTime(uuid);
             }
         }
         TimeTrackerUtils.saveHashMap(trackedPlayers, time);
@@ -60,48 +60,48 @@ public class TimeTracker extends JavaPlugin {
 
         getCommand("tracker").setExecutor(new TimeTrackerCommand(this));
 
-        new Metrics(this, -BSTATS_PLUGIN_ID);
+        new Metrics(this, BSTATS_PLUGIN_ID);
 
-        for (Player p : getServer().getOnlinePlayers()) {
-            String name = p.getName();
-            if (isPlayerTracked(name)) {
-                joinedTime.put(name, System.currentTimeMillis());
+        for (Player player : getServer().getOnlinePlayers()) {
+            String uuid = player.getUniqueId().toString();
+            if (isPlayerTracked(uuid)) {
+                joinedTime.put(uuid, System.currentTimeMillis());
             }
         }
     }
 
-    public boolean isPlayerTracked(String name) {
-        return trackedPlayers.containsKey(name);
+    public boolean isPlayerTracked(String uuid) {
+        return trackedPlayers.containsKey(uuid);
     }
 
-    public boolean addTrackedPlayer(String name) {
-        if (isPlayerTracked(name)) {
+    public boolean addTrackedPlayer(String uuid) {
+        if (isPlayerTracked(uuid)) {
             return false;
         }
         Long[][] weeks = new Long[52][7];
-        trackedPlayers.put(name, weeks);
+        trackedPlayers.put(uuid, weeks);
         return true;
     }
 
-    public void calculatePlayTime(String name) {
+    public void calculatePlayTime(String uuid) {
         long onlineTime = 0;
-        if (joinedTime.containsKey(name)) {
-            onlineTime = System.currentTimeMillis() - joinedTime.get(name);
+        if (joinedTime.containsKey(uuid)) {
+            onlineTime = System.currentTimeMillis() - joinedTime.get(uuid);
         }
         calendar.clear();
         calendar.setTime(new Date());
         int week = calendar.get(Calendar.WEEK_OF_YEAR) - 1;
         int day = calendar.get(Calendar.DAY_OF_WEEK) - 1;
-        Long[][] priorOnlineTime = trackedPlayers.get(name);
+        Long[][] priorOnlineTime = trackedPlayers.get(uuid);
         if (priorOnlineTime[week][day] == null) {
             priorOnlineTime[week][day] = onlineTime;
         } else {
             priorOnlineTime[week][day] += onlineTime;
         }
-        if (joinedTime.containsKey(name)) {
-            joinedTime.remove(name);
+        if (joinedTime.containsKey(uuid)) {
+            joinedTime.remove(uuid);
         }
-        trackedPlayers.put(name, priorOnlineTime);
+        trackedPlayers.put(uuid, priorOnlineTime);
     }
 
     public void addJoinedTime(String name, long currentTimeMillis) {

@@ -41,15 +41,16 @@ public class TimeTrackerCommand implements CommandExecutor {
                         sender.sendMessage(ChatColor.RED + "Bitte gib einen Spielernamen an!");
                     } else {
                         String name = args[1];
+                        String uuid = plugin.getServer().getOfflinePlayer(name).getUniqueId().toString();
                         if (!plugin.isPlayerTracked(args[1])) {
                             sender.sendMessage(ChatColor.RED + "Dieser Spieler ist nicht auf der Liste!");
                             return true;
                         }
-                        plugin.calculatePlayTime(name);
-                        plugin.addJoinedTime(name, System.currentTimeMillis());
+                        plugin.calculatePlayTime(uuid);
+                        plugin.addJoinedTime(uuid, System.currentTimeMillis());
                         if (args.length == 2) {
                             sender.sendMessage(ChatColor.GREEN + "Statistiken von " + name);
-                            Long[][] playerTime = plugin.getTrackedPlayers().get(name);
+                            Long[][] playerTime = plugin.getTrackedPlayers().get(uuid);
                             long allTimePlayTime = 0;
                             for (Long[] week : playerTime) {
                                 long playTime = 0;
@@ -78,7 +79,7 @@ public class TimeTrackerCommand implements CommandExecutor {
                                 }
                                 int kwReal = kw;
                                 kw -= 1;
-                                Long[] week = plugin.getTrackedPlayers().get(name)[kw];
+                                Long[] week = plugin.getTrackedPlayers().get(uuid)[kw];
                                 if (week == null) {
                                     sender.sendMessage(ChatColor.RED + "Keine Spielzeit in der Woche " + ChatColor.YELLOW + kwReal);
                                     return true;
