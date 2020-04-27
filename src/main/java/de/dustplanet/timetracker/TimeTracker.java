@@ -20,6 +20,7 @@ import de.dustplanet.timetracker.listeners.TimeTrackerPlayerListener;
 import lombok.Getter;
 
 public class TimeTracker extends JavaPlugin {
+    private static final int BSTATS_PLUGIN_ID = -1;
     @Getter
     private HashMap<String, Long[][]> trackedPlayers = new HashMap<>();
     private HashMap<String, Long> joinedTime = new HashMap<>();
@@ -62,7 +63,7 @@ public class TimeTracker extends JavaPlugin {
 
         getCommand("tracker").setExecutor(new TimeTrackerCommand(this));
 
-        new Metrics(this);
+        new Metrics(this, -BSTATS_PLUGIN_ID);
 
         for (Player p : getServer().getOnlinePlayers()) {
             String name = p.getName();
@@ -104,8 +105,9 @@ public class TimeTracker extends JavaPlugin {
     }
 
     public boolean addTrackedPlayer(String name) {
-        if (isPlayerTracked(name))
+        if (isPlayerTracked(name)) {
             return false;
+        }
         Long[][] weeks = new Long[52][7];
         trackedPlayers.put(name, weeks);
         return true;
