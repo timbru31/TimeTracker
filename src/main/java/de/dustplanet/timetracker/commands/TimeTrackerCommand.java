@@ -42,7 +42,7 @@ public class TimeTrackerCommand implements CommandExecutor {
                     } else {
                         String name = args[1];
                         String uuid = plugin.getServer().getOfflinePlayer(name).getUniqueId().toString();
-                        if (!plugin.isPlayerTracked(args[1])) {
+                        if (!plugin.isPlayerTracked(uuid)) {
                             sender.sendMessage(ChatColor.RED + "Dieser Spieler ist nicht auf der Liste!");
                             return true;
                         }

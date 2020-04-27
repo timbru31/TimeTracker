@@ -1,6 +1,7 @@
 name: TimeTracker
 main: de.dustplanet.timetracker.TimeTracker
 version: ${project.version}-b${BUILD_NUMBER}
+api-version: 1.13
 author: xGhOsTkiLLeRx
 commands:
   tracker:

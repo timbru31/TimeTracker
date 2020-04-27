@@ -6,6 +6,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.util.concurrent.TimeUnit;
 
 public class TimeTrackerUtils {
     public static void saveHashMap(Object fileObj, File file) {
@@ -28,11 +29,12 @@ public class TimeTrackerUtils {
     }
 
     public static String formatTime(long time) {
-        int milliseconds = (int) time;
-        int seconds = milliseconds / 1000 % 60;
-        int minutes = (milliseconds / (1000 * 60)) % 60;
-        int hours = (milliseconds / (1000 * 60 * 60)) % 24;
-        int days = (milliseconds / (1000 * 60 * 60 * 24)) % 30;
-        return days + " Tage, " + hours + " Stunden, " + minutes + " Minuten, " + seconds + " Sekunden";
+        int days = (int) TimeUnit.MILLISECONDS.toDays(time);
+        long hours = TimeUnit.MILLISECONDS.toHours(time) - TimeUnit.DAYS.toHours(days);
+        long minutes = TimeUnit.MILLISECONDS.toMinutes(time) - TimeUnit.DAYS.toMinutes(days) - TimeUnit.HOURS.toMinutes(hours);
+        long seconds = TimeUnit.MILLISECONDS.toSeconds(time) - TimeUnit.DAYS.toSeconds(days) - TimeUnit.HOURS.toSeconds(hours)
+                - TimeUnit.MINUTES.toSeconds(minutes);
+        return String.format("%d days, %d hours, %d minutes, %d seconds", days, hours, minutes, seconds);
     }
+
 }
