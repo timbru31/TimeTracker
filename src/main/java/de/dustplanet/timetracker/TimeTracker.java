@@ -39,7 +39,7 @@ public class TimeTracker extends JavaPlugin {
         trackedPlayers.clear();
     }
 
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings("unused")
     @Override
     public void onEnable() {
         joinedTime.clear();
@@ -74,13 +74,9 @@ public class TimeTracker extends JavaPlugin {
     }
 
     private void saveHashMap(Object fileObj, File file) {
-        FileOutputStream f;
-        try {
-            f = new FileOutputStream(file);
-            ObjectOutputStream s = new ObjectOutputStream(f);
+        try (FileOutputStream f = new FileOutputStream(file); ObjectOutputStream s = new ObjectOutputStream(f)) {
             s.writeObject(fileObj);
             s.flush();
-            s.close();
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -88,12 +84,8 @@ public class TimeTracker extends JavaPlugin {
 
     private Object loadHashMap(File file) {
         Object o = null;
-        FileInputStream f;
-        try {
-            f = new FileInputStream(file);
-            ObjectInputStream s = new ObjectInputStream(f);
+        try (FileInputStream f = new FileInputStream(file); ObjectInputStream s = new ObjectInputStream(f)) {
             o = s.readObject();
-            s.close();
         } catch (IOException | ClassNotFoundException e) {
             e.printStackTrace();
         }
