@@ -8,6 +8,7 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 
 import de.dustplanet.timetracker.TimeTracker;
+import de.dustplanet.timetracker.TimeTrackerUtils;
 
 public class TimeTrackerCommand implements CommandExecutor {
     private final String[] dayValues = { "Sonntag", "Montag", "Dienstag", "Mittwoch", "Donnerstag", "Freitag", "Samstag" };
@@ -31,8 +32,9 @@ public class TimeTrackerCommand implements CommandExecutor {
                             + " - Gibt einen Überblick über die Spielstunden pro Kalenderwoche");
                     sender.sendMessage(ChatColor.YELLOW + "/tracker get|g <SpielerName> <KW>" + ChatColor.WHITE
                             + " - Gibt einen Überblick über die Spielstunden in der angegebenen Kalenderwoche");
-                } else
+                } else {
                     sender.sendMessage(ChatColor.RED + "Du hast nicht die Berechtigung hierzu!");
+                }
             } else if (args[0].equalsIgnoreCase("get") || args[0].equalsIgnoreCase("g")) {
                 if (sender.hasPermission("TimeTracker.get")) {
                     if (args.length == 1) {
@@ -43,7 +45,7 @@ public class TimeTrackerCommand implements CommandExecutor {
                             sender.sendMessage(ChatColor.RED + "Dieser Spieler ist nicht auf der Liste!");
                             return true;
                         }
-                        plugin.calculate(name);
+                        plugin.calculatePlayTime(name);
                         plugin.addJoinedTime(name, System.currentTimeMillis());
                         if (args.length == 2) {
                             sender.sendMessage(ChatColor.GREEN + "Statistiken von " + name);
@@ -52,19 +54,20 @@ public class TimeTrackerCommand implements CommandExecutor {
                             for (Long[] week : playerTime) {
                                 long playTime = 0;
                                 for (Long day : week) {
-                                    if (day == null)
+                                    if (day == null) {
                                         continue;
+                                    }
                                     playTime += day;
                                 }
                                 if (playTime != 0) {
                                     sender.sendMessage(
                                             ChatColor.YELLOW + "Spielzeit in der Woche " + (Arrays.asList(playerTime).indexOf(week) + 1));
-                                    sender.sendMessage(plugin.calculateTime(playTime));
+                                    sender.sendMessage(TimeTrackerUtils.formatTime(playTime));
                                 }
                                 allTimePlayTime += playTime;
                             }
                             sender.sendMessage(ChatColor.YELLOW + "Spielzeit insgesamt");
-                            sender.sendMessage(plugin.calculateTime(allTimePlayTime));
+                            sender.sendMessage(TimeTrackerUtils.formatTime(allTimePlayTime));
                         } else {
                             int kw = 0;
                             try {
@@ -82,8 +85,9 @@ public class TimeTrackerCommand implements CommandExecutor {
                                 }
                                 long onlineZeit = 0;
                                 for (Long day : week) {
-                                    if (day == null)
+                                    if (day == null) {
                                         day = (long) 0;
+                                    }
                                     onlineZeit += day;
                                 }
                                 if (onlineZeit == 0) {
@@ -96,22 +100,25 @@ public class TimeTrackerCommand implements CommandExecutor {
                                 for (Long day : week) {
                                     if (day == null || day == 0) {
                                         sender.sendMessage(ChatColor.YELLOW + dayValues[i] + ChatColor.WHITE + ": Keine Spielzeit");
-                                    } else
-                                        sender.sendMessage(
-                                                ChatColor.YELLOW + dayValues[i] + ChatColor.WHITE + ": " + plugin.calculateTime(day));
+                                    } else {
+                                        sender.sendMessage(ChatColor.YELLOW + dayValues[i] + ChatColor.WHITE + ": "
+                                                + TimeTrackerUtils.formatTime(day));
+                                    }
                                     i++;
                                 }
-                            } catch (NumberFormatException e) {
+                            } catch (@SuppressWarnings("unused") NumberFormatException e) {
                                 sender.sendMessage(ChatColor.RED + "Bitte gib eine Zahl als Woche an!");
                                 return true;
                             }
 
                         }
                     }
-                } else
+                } else {
                     sender.sendMessage(ChatColor.RED + "Du hast nicht die Berechtigung hierzu!");
-            } else
+                }
+            } else {
                 sender.sendMessage(ChatColor.RED + "Dieses Argument ist unbekannt. Tippe für die Hilfe /tracker help|hilfe");
+            }
         }
         return true;
     }

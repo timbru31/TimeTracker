@@ -28,7 +28,7 @@ public class TimeTrackerPlayerListener implements Listener {
     public void onPlayerQuit(PlayerQuitEvent event) {
         String name = event.getPlayer().getName();
         if (plugin.isPlayerTracked(name)) {
-            plugin.calculate(name);
+            plugin.calculatePlayTime(name);
         }
     }
 
@@ -36,7 +36,7 @@ public class TimeTrackerPlayerListener implements Listener {
     public void onPlayerKick(PlayerKickEvent event) {
         String name = event.getPlayer().getName();
         if (plugin.isPlayerTracked(name)) {
-            plugin.calculate(name);
+            plugin.calculatePlayTime(name);
         }
     }
 }
