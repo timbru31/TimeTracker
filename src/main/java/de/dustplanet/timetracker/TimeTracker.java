@@ -20,7 +20,7 @@ import de.dustplanet.timetracker.listeners.TimeTrackerPlayerListener;
 import lombok.Getter;
 
 public class TimeTracker extends JavaPlugin {
-    private static final int BSTATS_PLUGIN_ID = -1;
+    private static final int BSTATS_PLUGIN_ID = 7334;
     @Getter
     private HashMap<String, Long[][]> trackedPlayers = new HashMap<>();
     private HashMap<String, Long> joinedTime = new HashMap<>();
